@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TextUi</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    
+    <div id="main">
+        <!-- <div class="ui">
+            <div class="key">E</div>
+            <div class="text">Lorem ipsum dolor, sit amet </div>
+        </div>
+
+        <div class="ui">
+            <div class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit.</div>
+        </div>
+
+        <div class="ui">
+            <div class="text">[E] Lorem Ipsum dolor.</div>
+        </div> -->
+    </div>
+    
+    <audio id="openAudio" preload="none" src="audio/open.mp3"></audio>
+    <script>
+        var main = document.getElementById("main");
+
+        var sound = false;
+
+        class Audio {
+            constructor(name, volume) {
+                this.element = document.getElementById(name);
+                this.element.volume = volume;
+            };
+
+            start() {
+                if (!sound) { return; }
+
+                this.element.currentTime = 0;
+                this.element.play();
+            };
+
+            stop() {
+                if (!sound) { return; }
+
+                this.element.pause();
+            };
+        }
+
+        notification = new Audio("openAudio", 0.05);
+
+
+        function config(data) {
+            sound = data.sound;
+
+            main.classList.remove(...main.classList);
+            main.classList.add(data.side);
+
+            document.documentElement.style.setProperty('--background', data.theme.background);
+            document.documentElement.style.setProperty('--key_background', data.theme.key_background);
+            document.documentElement.style.setProperty('--text', data.theme.text);
+        }
+
+        function create(data) {
+            notification.start();
+           
+            main.innerHTML += `
+                <div id="${data.ui}" class="ui">
+                    ${ data.key ? `<div class=\"key\">${data.key}</div>` : "" }
+                    <div class="text">${data.text}</div>
+                </div>
+            `
+
+            setTimeout(() => {
+                elem = main.querySelector(`#${data.ui}`);
+                elem.style.opacity = "100%";
+                elem.style.transition = "opacity 0.2s linear";
+            }, 100);
+        }
+
+        function update(elem, data) {
+            if (elem && data.text) {
+                const textElement = elem.querySelector('.text');
+                if (textElement) {
+                    textElement.textContent = data.text;
+                }
+            }
+
+            if (data.key) {
+                const keyElement = elem.querySelector('.key');
+                const newKeyElement = document.createElement('div');
+                newKeyElement.classList.add('key');
+                newKeyElement.textContent = data.key;
+
+                const existingElement = elem.querySelector('.text');
+                
+                if (existingElement) {
+                    elem.insertBefore(newKeyElement, existingElement);
+                } else {
+                    elem.appendChild(newKeyElement);
+                }
+
+                if (keyElement) {
+                    elem.removeChild(keyElement);
+                }
+            } else {
+                const keyElement = elem.querySelector('.key');
+                if (keyElement) {
+                    elem.removeChild(keyElement);
+                }
+            }
+        }
+
+        function show(data) {
+
+            var elem = main.querySelector(`#${data.ui}`)
+            if (!elem) { 
+                create(data)
+            } else {
+                update(elem, data)
+            }
+        }
+
+        function hide(ui) {
+            let div = document.getElementById(ui);
+            if (!div) { return };
+
+            div.style.opacity = "0%";
+            div.style.transition = "opacity 0.5s linear";
+
+            setTimeout(function() {
+                div.remove();
+            }, 500)
+        }
+
+        window.addEventListener('message', function(event) {
+            var action = event.data.action;
+            var data = event.data.data;
+
+            switch (action) {
+                case "show":
+                    show(data);
+                    break;
+
+                case "hide":
+                    hide(data);
+                    break;
+            
+                case "config":
+                    config(data);
+                    break;
+            
+                default:
+                    break;
+            }
+        })
+
+        window.onload = function() {
+            fetch(`https://${GetParentResourceName()}/ready`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify({})
+            });
+        }
+    </script>
+</body>
+
+</html>
