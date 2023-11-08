@@ -1,5 +1,4 @@
 
-
 ##  Text UI
 
 The best Text UI to replace the default 3DText!
@@ -14,16 +13,11 @@ The best Text UI to replace the default 3DText!
 - 🚀 Standalone script
 
 
-## 👀 Preview 
-
 
 
 ## 🎥 Media 
 
 #### [Youtube](https://youtu.be/UHcuTl5sMgc) / [Config](https://imgur.com/a/zNlIdKV)
-
-
-### Get it [here](https://ribeira.tebex.io/)(PAY WHAT YOU WANT, SET 0.00 TO FREE) 🔥
 
 
 |                                         |                                |
